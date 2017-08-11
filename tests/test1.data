@@ -1,0 +1,8 @@
+@class LIFE:1,2
+@stable AGE:10,20,30,40,50,60,70,80
+@stable SEX:1,2
+@flexible STEROID:1,2
+@flexible ANTIVIRALS:1,2
+@flexible BILIRUBIN:0.39,0.80,1.20,2.00,3.00,4.00
+@data
+
