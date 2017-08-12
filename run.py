@@ -1,7 +1,9 @@
-from ActionRules import *
+from __future__ import print_function
+
+from action_rules import transactions
 
 
-transactions = Transactions('tests/test1.data')
+transactions = transactions.Transactions('tests/test1.data')
 
 
-print(transactions.numTransactions)
+print(*transactions.randomAttributeValue('class'))

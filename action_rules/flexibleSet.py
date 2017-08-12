@@ -1,6 +1,6 @@
-from __future__ import printfunction()
+from __future__ import print_function
 
-class AtomicSet():
+class FlexibleSet():
     def __init__(self, attribute, conditionValue, predictionValue):
         self.attribute = attribute
         self.conditionValue = conditionValue
