@@ -50,7 +50,8 @@ def readinFile(fileName, nullValue='?'):
                 #print("Attribute: ", attribute.name,
                      #"Value: ", value)
                 if value == nullValue: continue
-
+                
+                
                 else:
                     #print("Invalid Entry")
                     tempVal = cleanData(value, attribute.attrValList)
@@ -66,6 +67,8 @@ def readinFile(fileName, nullValue='?'):
     return stableDict, flexDict, classDict, attrList, numTransactions
 
 def cleanData(value, valueList):
+
+    if value in valueList: return value
 
     try:
         tempValue = int(value)

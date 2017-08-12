@@ -1,6 +1,7 @@
 from ActionRules import *
 
 
-transactions = Transactions('Data/hepatitis.data')
+transactions = Transactions('tests/test1.data')
+
 
 print(transactions.numTransactions)

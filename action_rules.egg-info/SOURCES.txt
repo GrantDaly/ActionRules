@@ -1,0 +1,16 @@
+setup.py
+action_rules/__init__.py
+action_rules/actionRule.py
+action_rules/atomicSet.py
+action_rules/attribute.py
+action_rules/classSet.py
+action_rules/flexibleSet.py
+action_rules/readinData.py
+action_rules/stableSet.py
+action_rules/transactions.py
+action_rules.egg-info/PKG-INFO
+action_rules.egg-info/SOURCES.txt
+action_rules.egg-info/dependency_links.txt
+action_rules.egg-info/top_level.txt
+tests/__init__.py
+tests/tests.py

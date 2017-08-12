@@ -4,5 +4,9 @@
 @flexible STEROID:1,2
 @flexible ANTIVIRALS:1,2
 @flexible BILIRUBIN:0.39,0.80,1.20,2.00,3.00,4.00
+@flexible occupation:Techsupport,Craftrepair,Otherservice,Sales,Execmanagerial,Profspecialty,Handlerscleaners,Machineopinspct,Admclerical,Farmingfishing,Transportmoving,Privhouseserv,Protectiveserv,ArmedForces
 @data
-
+2,10,1,1,1,0.39,Techsupport
+2,11,2,1,1,0.39,Craftrepair
+1,20,1,2,2,0.555,Techsupport
+1,24,2,1,1,0.81,Craftrepair
