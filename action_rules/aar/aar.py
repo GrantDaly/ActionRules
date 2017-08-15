@@ -10,6 +10,7 @@ class AAR:
             self.minSup = minSup
         elif isinstance(minSup, float):
             self.minSup = minSup * self.transaction.numTransactions
+        self.minConf = float(minConf)
         self.desired = desired
 
     
@@ -20,13 +21,15 @@ class AAR:
         #print(self.desired)
         classAttrs = self.transactions.undesiredAttributes(self.desired)
 
-        while True:
+        initialActionSet = self.generateSingletRules(stableAttrs, flexibleAttrs, classAttrs)
+        [i.prettyPrint() for i in initialActionSet]
+        #while True:
 
-            #print(*(i for i in itertools.product(stableAttrs, flexibleAttrs)))
-            self.generateSingletRules(stableAttrs, flexibleAttrs, classAttrs)
+           
+            #self.generateSingletRules(stableAttrs, flexibleAttrs, classAttrs)
             
             #print(flexibleAttrs)
-            break
+            #break
 
     def generateSingletRules(self, stableAttrs, flexibleAttrs, classAttrs):
         for stabAttr, stabValues in stableAttrs:
@@ -42,4 +45,6 @@ class AAR:
                                 tempFlexSet = [flexibleSet.FlexibleSet(flexAttr, *flexVal)]
                                 tempClassSet = [classSet.ClassSet(classAttr, classVal, self.desired[classAttr])]
                                 tempActionRule = actionRule.ActionRule(tempStabSet, tempFlexSet, tempClassSet, self.transactions)
-                                tempActionRule.prettyPrint()
+                                #tempActionRule.prettyPrint()
+                                tempSup, tempConf = tempActionRule.suppConf()
+                                if (tempSup >= self.minSup and tempConf >= self.minConf) : yield tempActionRule

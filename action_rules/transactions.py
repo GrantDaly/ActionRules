@@ -50,6 +50,7 @@ class Transactions():
 
     def getTransactions(self, attribute, value, flexOrStab):
         attrDict = self._getDictionary(flexOrStab)
+        #print(attrDict)
         return attrDict[attribute][value]
 
 
