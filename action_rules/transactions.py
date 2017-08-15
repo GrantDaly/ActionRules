@@ -27,7 +27,29 @@ class Transactions():
             return attribute, (value, tempVal)
         else: return attribute, value
 
-        
-        
+    def generateAttribute(self, flexOrStab):
+        attrDict = self._getDictionary(flexOrStab)
+        for attr in attrDict.keys():
+            yield attr
+
+    def generateValue(self, attribute, flexOrStab):
+        attrDict = self._getDictionary(flexOrStab)
+        for value in attrDict[attribute]:
+            yield value
+
+    def generateAttrValue(self, flexOrStab):
+        for attr in self.generateAttribute(flexOrStab):
+            values = tuple(self.generateValue(attr, flexOrStab))
+            yield attr, values
+
+    def undesiredAttributes(self, desired):
+        classAttrs = []
+        for attr, vals in self.generateAttrValue('class'):
+            classAttrs.append((attr, tuple(val for val in vals if val != desired[attr])))
+        return classAttrs
+
+    def getTransactions(self, attribute, value, flexOrStab):
+        attrDict = self._getDictionary(flexOrStab)
+        return attrDict[attribute][value]
 
 

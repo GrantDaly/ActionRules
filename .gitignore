@@ -1,8 +1,6 @@
 venv/
 *.pyc
 *.swp
-AAR/
-MOEAR/
 *.mo
 *.egg-info
 *.egg

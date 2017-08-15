@@ -1,8 +1,10 @@
 from action_rules import (
                          transactions,
                          readinData,
+                         aar
                          )
 
-transactions = transactions.Transactions('test1.data')
+transactObject = transactions.Transactions('test1.data')
 
-print(transactions.numTransactions)
+aar = aar.AAR(transactObject, 1, 1, {'LIFE':'2'})
+aar.aarGenerator()

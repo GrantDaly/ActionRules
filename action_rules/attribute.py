@@ -7,14 +7,14 @@ class Attribute:
         self.attrType = attrType
         self.attrValList = attrValList
 
-    def isFlex():
+    def isFlex(self):
         return self.attrType == 'flexible'
 
-    def isStable():
+    def isStable(self):
         return self.attrType == 'stable'
 
-    def isClass():
-        return self.attryType == 'class'
+    def isClass(self):
+        return self.attrType == 'class'
 
     def displayAttr(self):
         print("Attribute Name: ",self.name, 
