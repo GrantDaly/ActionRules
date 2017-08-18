@@ -1,9 +1,11 @@
 from __future__ import print_function
 
-from attribute import Attribute
+import pdb
+#from attribute import Attribute
+#from attributeValue import AttributeValue
 
 from decimal import Decimal
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 import csv
 import re
 
@@ -11,6 +13,7 @@ def readinFile(fileName, nullValue='?'):
 
     with open(fileName, 'r') as inFile:
         attrList = []
+
         for line in inFile:
             if not (line.startswith("%")):
                 line = line.strip('\n')
@@ -24,29 +27,26 @@ def readinFile(fileName, nullValue='?'):
                 attrName = line.pop(0)
                 
                 attrValList = line[0].split(',')
+                #attrValList = [AttributeValue(i) for i in attrValList]
 
-                tempAttr = Attribute(attrName, attrType, attrValList)
+                #tempAttr = Attribute(attrName, attrType, attrValList)
+                tempAttr = tuple((attrName, attrType, attrValList))
                 attrList.append(tempAttr)
-        #[attr.displayAttr() for attr in attrList]
 
-        stableDict = defaultdict(dict)
-        flexDict = defaultdict(dict)
-        classDict = defaultdict(dict)
+        transactionDict = OrderedDict()
+        for attrName, attrTyp, attrValList in attrList:
 
-        attrSwitch = {'class' : classDict,
-                      'flexible' : flexDict,
-                      'stable' : stableDict}
+            transactionDict[attrName] = dict()
+            transactionDict[attrName]['type'] = attrTyp
+            transactionDict[attrName]['values'] = OrderedDict.fromkeys(attrValList, set())
 
-        for attribute in attrList:
-            attrDict = attrSwitch[attribute.attrType][attribute.name]
-            for val in attribute.attrValList:
-                attrDict[val] = set()
-        #print(flexDict)
+
 
         for i, line in enumerate(inFile):
             line = line.strip('\n').split(',')
             
-            for attribute , value in zip(attrList , line):
+            for attribute , value in zip(transactionDict.keys() , line):
+                #pdb.set_trace()
                 #print("Attribute: ", attribute.name,
                      #"Value: ", value)
                 if value == nullValue: continue
@@ -54,17 +54,11 @@ def readinFile(fileName, nullValue='?'):
                 
                 else:
                     #print("Invalid Entry")
-                    tempVal = cleanData(value, attribute.attrValList)
-                    #print("Temp Val: ", tempVal, "***", attribute.attrValList)
-                    try:
-                        attrSwitch[attribute.attrType][attribute.name][tempVal].add(i)
-                    except KeyError:
-                        attrSwitch[attribute.attrType][attribute.name][tempVal] = set()
-    #print("Stab Dict: ",stableDict)
-    #print("******************************************")
-    #print("Flex Hist: ", flexDict['HISTOLOGY'])
+                    tempVal = cleanData(value, transactionDict[attribute]['values'].keys())
+                    transactionDict[attribute]['values'][tempVal].add(i)
+                    
     numTransactions = i + 1
-    return stableDict, flexDict, classDict, attrList, numTransactions
+    return transactionDict, numTransactions
 
 def cleanData(value, valueList):
 
