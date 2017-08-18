@@ -5,7 +5,7 @@ import random
 
 class Transactions():
     def __init__(self, fileName, nullValue='?'):
-        self.stableDict, self.flexDict, self.classDict, self.attrList, self.numTransactions = readinFile(fileName, nullValue)
+        self.transactionDict, self.numTransactions = readinFile(fileName, nullValue)
 
     def _getDictionary(self, flexOrStab):
         switchDict = {'flexible' : self.flexDict,
@@ -27,20 +27,23 @@ class Transactions():
             return attribute, (value, tempVal)
         else: return attribute, value
 
-    def generateAttribute(self, flexOrStab):
-        attrDict = self._getDictionary(flexOrStab)
-        for attr in attrDict.keys():
+    def generateAttribute(self):
+        #attrDict = self._getDictionary(flexOrStab)
+        for attr in self.transactionDict.keys():
             yield attr
 
-    def generateValue(self, attribute, flexOrStab):
-        attrDict = self._getDictionary(flexOrStab)
-        for value in attrDict[attribute]:
+    def generateValue(self, attribute):
+        #attrDict = self._getDictionary(flexOrStab)
+        for value in self.transactionDict[attribute]['values']:
             yield value
 
-    def generateAttrValue(self, flexOrStab):
-        for attr in self.generateAttribute(flexOrStab):
-            values = tuple(self.generateValue(attr, flexOrStab))
+    def generateAttrValue(self):
+        for attr in self.generateAttribute():
+            values = self.generateValue(attr)
             yield attr, values
+
+    def getType(self, attribute):
+        return self.transactionDict[attribute]['type']
 
     def undesiredAttributes(self, desired):
         classAttrs = []

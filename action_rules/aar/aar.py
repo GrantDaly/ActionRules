@@ -1,7 +1,9 @@
 from __future__ import print_function
 
+import pdb
+
 import itertools
-from action_rules import classSet, stableSet, flexibleSet, actionRule
+from action_rules import classSet, stableSet, flexibleSet, actionRule, atomicSet
 
 class AAR:
     def __init__(self, transactions, minSup, minConf, desired):
@@ -31,20 +33,31 @@ class AAR:
             #print(flexibleAttrs)
             #break
 
-    def generateSingletRules(self, stableAttrs, flexibleAttrs, classAttrs):
-        for stabAttr, stabValues in stableAttrs:
-            for stabVal in stabValues:
-                #print(stabAttr, stabVal)
-                for flexAttr, flexValues in flexibleAttrs:
-                    #print(*itertools.permutations(flexValues, 2))
-                    for flexVal in itertools.permutations(flexValues, 2):
-                        for classAttr, classValues in classAttrs:
-                            for classVal in classValues:
-                                #print(stabAttr, stabVal, flexAttr, flexVal, classAttr, (classVal, self.desired[classAttr]))
-                                tempStabSet = [stableSet.StableSet(stabAttr, stabVal)]
-                                tempFlexSet = [flexibleSet.FlexibleSet(flexAttr, *flexVal)]
-                                tempClassSet = [classSet.ClassSet(classAttr, classVal, self.desired[classAttr])]
-                                tempActionRule = actionRule.ActionRule(tempStabSet, tempFlexSet, tempClassSet, self.transactions)
-                                #tempActionRule.prettyPrint()
-                                tempSup, tempConf = tempActionRule.suppConf()
-                                if (tempSup >= self.minSup and tempConf >= self.minConf) : yield tempActionRule
+
+
+    def generateAtomicSets(self):
+        switchDict = {'class' : self.classAtomicSet, 'stable': self.stableAtomicSet, 'flexible' : self.flexibleAtomicSet}
+        for attr in self.transactions.generateAttribute():
+            valList = [val for val in self.transactions.generateValue(attr)]
+            attrType = self.transactions.getType(attr)
+            tempAtomicSetGen = switchDict[attrType]
+            #atomicSetVals = [(attr, val) for val in tempAtomicSetGen(*valList)]
+            #yield atomicSetVals
+            yield ((attr, val) for val in tempAtomicSetGen(*valList))
+                
+
+
+    def classAtomicSet(self, *values):
+        desired = self.desired
+        undesiredList = filter(lambda x: x != desired, values)
+
+        for undes in undesiredList:
+            yield undes, desired
+
+    def stableAtomicSet(self, *values):
+        for stab in values:
+            yield stab, stab
+
+    def flexibleAtomicSet(self, *values):
+        for cond, pred in itertools.permutations(values, 2):
+            yield cond, pred
